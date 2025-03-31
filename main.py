@@ -8,7 +8,7 @@ def randWalk(s):
     grid = [[0 for _ in range(s)] for _ in range(s)]
     
     x,y = 0, 0
-    grid[x][y] = 1
+    grid[y][x] = 1
     visitedCount = 1
     total = s ** 2
     
@@ -22,7 +22,7 @@ def randWalk(s):
     ax.set_aspect('equal')
     ax.grid(True)
     cmap = ListedColormap(['white', 'blue'])
-    img = ax.imshow(grid, cmap, vmin=0, vmax=1)
+    img = ax.imshow(grid, cmap, origin='lower', extent=(-0.5, s-0.5, -0.5, s-0.5))
     line, = ax.plot([], [], 'r-', lw=1)
     point, = ax.plot([], [], 'ro')
     
@@ -41,8 +41,8 @@ def randWalk(s):
             
             if newX != x or newY != y:
                 x, y = newX, newY
-                if grid[x][y] == 0:
-                    grid[x][y] = 1
+                if grid[y][x] == 0:
+                    grid[y][x] = 1
                     visitedCount += 1
                 path.append((x,y))
                 img.set_array(grid)
@@ -64,3 +64,18 @@ def randWalk(s):
     plt.show()
     
     return path
+
+if __name__ == '__main__':
+    try:
+        s = int(input('Enter grid size (e.g., 50 for a 50x50 grid)'))
+        if s <= 0:
+            raise ValueError('Grid size must be positive')
+        
+        print('Starting simulation...')
+        print('(close the window to stop the simulation)')
+        
+        path = randWalk(s)
+    except ValueError as e:
+        print(f'Invalid input: {e}')
+    except KeyboardInterrupt:
+        print('Simulation stopped by User.')
